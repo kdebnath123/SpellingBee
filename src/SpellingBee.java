@@ -73,13 +73,85 @@ public class SpellingBee {
     // TODO: Apply mergesort to sort all words. Do this by calling ANOTHER method
     //  that will find the substrings recursively.
     public void sort() {
-        // YOUR CODE HERE
 
-        for (String arr: words) {
-            System.out.println(arr);
+        System.out.println("now sorting");
+
+        // YOUR CODE HERE
+        int[] arr = {8,1,3,2,4,5,7,6,9};
+
+        int[] arr1 = {1,3,5};
+        int[] arr2 = {2,4,6};
+
+        int[] arr3 = new int[6];
+
+        arr3 = merge(arr1, arr2);
+
+        for (int a: arr3) {
+            System.out.println(a);
+        }
+
+        //mergeSort(arr, 0 , arr.length);
+
+    }
+
+    public int[] mergeSort(int[] arr, int left, int right) {
+
+        if(left == right){
+
+            int[] theta = new int[1];
+            theta[0] = arr[left];
+
+            return theta;
+        }
+
+        int mid = (left + right) / 2;
+
+        return merge(mergeSort(arr, left, mid - 1), mergeSort(arr, mid + 1, right));
+
+
+
+    }
+
+
+
+
+
+
+
+
+    /*** takes in 2 presorted arr and merges them ***/
+    public int[] merge (int[] arr1, int[] arr2) {
+
+        System.out.println("merging");
+
+        int[] sorted = new int[arr1.length + arr2.length];
+
+        int a = 0;
+        int b = 0;
+        int c = 0;
+
+        while(a < arr1.length && b < arr2.length){
+
+            if (arr1[a] <= arr2[b]) {
+                sorted[c++] = arr1[a++];
+            }
+            else {
+                sorted[c++] = arr2[b++];
+            }
+        }
+
+        System.out.println("half");
+
+        while(a < arr1.length){
+            sorted[c++] = arr1[a++];
+        }
+
+        while(b < arr2.length) {
+            sorted[c++] = arr2[b++];
         }
 
 
+        return sorted;
     }
 
     // Removes duplicates from the sorted list.
@@ -140,6 +212,13 @@ public class SpellingBee {
 
     public static void main(String[] args) {
 
+        SpellingBee sb = new SpellingBee("");
+        //sb.generate();
+        sb.sort();
+
+
+        /***
+
         // Prompt for letters until given only letters.
         Scanner s = new Scanner(System.in);
         String letters;
@@ -164,5 +243,7 @@ public class SpellingBee {
             System.out.println("Could not write to output file.");
         }
         s.close();
+
+         ***/
     }
 }
