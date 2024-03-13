@@ -57,34 +57,16 @@ public class SpellingBee {
             return;
         }
 
-
-        //Choose the next letter
-        // itterate over letters
-        // stick at the end
-        // add to john recurse with that word.
-
         String newWord;
+        String newLetters;
         for(int i = 0; i < letters.length(); i++){
 
-            newWord = word + "letters";
+            newWord = word + letters.charAt(i);
+            newLetters = letters.substring(0,i) + letters.substring(i + 1);
+            words.add(newWord);
 
-
-
-
-
-
+            gen(newWord, newLetters);
         }
-
-
-
-
-        //Recurse
-
-
-
-
-
-
     }
 
 
@@ -92,6 +74,12 @@ public class SpellingBee {
     //  that will find the substrings recursively.
     public void sort() {
         // YOUR CODE HERE
+
+        for (String arr: words) {
+            System.out.println(arr);
+        }
+
+
     }
 
     // Removes duplicates from the sorted list.
