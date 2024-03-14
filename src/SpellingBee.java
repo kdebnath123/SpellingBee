@@ -74,84 +74,55 @@ public class SpellingBee {
     //  that will find the substrings recursively.
     public void sort() {
 
-        System.out.println("now sorting");
+        words  = mergeSort(words, 0, words.size() - 1);
 
-        // YOUR CODE HERE
-        int[] arr = {8,1,3,2,4,5,7,6,9};
-
-        int[] arr1 = {1,3,5};
-        int[] arr2 = {2,4,6};
-
-        int[] arr3 = new int[6];
-
-        arr3 = merge(arr1, arr2);
-
-        for (int a: arr3) {
+        for (String a: words) {
             System.out.println(a);
         }
-
-        //mergeSort(arr, 0 , arr.length);
-
     }
 
-    public int[] mergeSort(int[] arr, int left, int right) {
+    public ArrayList<String> mergeSort(ArrayList<String> arr, int left, int right) {
 
-        if(left == right){
-
-            int[] theta = new int[1];
-            theta[0] = arr[left];
-
-            return theta;
+        if (right - left == 0) {
+            ArrayList<String> newArr = new ArrayList<String>();
+            newArr.add(arr.get(left));
+            return newArr;
         }
 
-        int mid = (left + right) / 2;
-
-        return merge(mergeSort(arr, left, mid - 1), mergeSort(arr, mid + 1, right));
-
-
-
+        int med = (right + left) / 2;
+        ArrayList<String> arrLeft = mergeSort(arr, left, med);
+        ArrayList<String> arrRight = mergeSort(arr, med+1, right);
+        return merge(arrLeft, arrRight);
     }
-
-
-
-
-
-
-
 
     /*** takes in 2 presorted arr and merges them ***/
-    public int[] merge (int[] arr1, int[] arr2) {
+    public ArrayList<String> merge(ArrayList<String> arr1, ArrayList<String> arr2) {
 
-        System.out.println("merging");
+        ArrayList<String> sorted = new ArrayList<String>();
 
-        int[] sorted = new int[arr1.length + arr2.length];
+        int a = 0, b = 0, c = 0;
 
-        int a = 0;
-        int b = 0;
-        int c = 0;
+        while(a < arr1.size() && b < arr2.size()){
 
-        while(a < arr1.length && b < arr2.length){
-
-            if (arr1[a] <= arr2[b]) {
-                sorted[c++] = arr1[a++];
+            if (arr1.get(a).compareTo(arr2.get(b)) <= 0) {
+                sorted.add(c++, arr1.get(a++));
             }
             else {
-                sorted[c++] = arr2[b++];
+                sorted.add(c++, arr2.get(b++));
             }
         }
 
-        System.out.println("half");
 
-        while(a < arr1.length){
-            sorted[c++] = arr1[a++];
+        while(a < arr1.size()){
+            sorted.add(c++, arr1.get(a++));
         }
 
-        while(b < arr2.length) {
-            sorted[c++] = arr2[b++];
+        while(b < arr2.size()) {
+            sorted.add(c++, arr2.get(b++));
         }
-
 
         return sorted;
+
     }
 
     // Removes duplicates from the sorted list.
@@ -169,7 +140,19 @@ public class SpellingBee {
     // TODO: For each word in words, use binary search to see if it is in the dictionary.
     //  If it is not in the dictionary, remove it from words.
     public void checkWords() {
-        // YOUR CODE HERE
+        for(String word: words) {
+            if(!binarySearch(word)){
+                words.remove(word)
+            }
+
+
+        }
+    }
+
+    public void binarySearch(String word) {
+
+
+
     }
 
     // Prints all valid words to wordList.txt
@@ -212,9 +195,13 @@ public class SpellingBee {
 
     public static void main(String[] args) {
 
-        SpellingBee sb = new SpellingBee("");
-        //sb.generate();
+        SpellingBee sb = new SpellingBee("abc");
+        sb.generate();
         sb.sort();
+        sb.removeDuplicates();
+        sb.checkWords();
+
+
 
 
         /***
