@@ -1,3 +1,4 @@
+import javax.annotation.processing.SupportedSourceVersion;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -22,7 +23,7 @@ import java.util.Scanner;
  * It utilizes recursion to generate the strings, mergesort to sort them, and
  * binary search to find them in a dictionary.
  *
- * @author Zach Blick, [ADD YOUR NAME HERE]
+ * @author Zach Blick, Kirin Debnath
  *
  * Written on March 5, 2023 for CS2 @ Menlo School
  *
@@ -40,49 +41,50 @@ public class SpellingBee {
         words = new ArrayList<String>();
     }
 
-    // TODO: generate all possible substrings and permutations of the letters.
-    //  Store them all in the ArrayList words. Do this by calling ANOTHER method
-    //  that will find the substrings recursively.
+
     public void generate() {
-        // YOUR CODE HERE — Call your recursive method!
-       gen("", letters);
-
-
+        generateWords("", letters);
     }
 
-    public void gen(String word, String letters){
 
-        //base case
-        if(letters.equals("")){
+     /*** Generates all possible substrings and permutations of letters ***/
+    public void generateWords(String word, String letters) {
+
+        // Base case when no letters remain
+        if(letters.equals("")) {
             return;
         }
 
         String newWord;
         String newLetters;
-        for(int i = 0; i < letters.length(); i++){
 
+        // Recursive branch for each remaining letter
+        for(int i = 0; i < letters.length(); i++) {
+
+            // Append current letter to word
             newWord = word + letters.charAt(i);
-            newLetters = letters.substring(0,i) + letters.substring(i + 1);
             words.add(newWord);
 
-            gen(newWord, newLetters);
+            // Remove used letter from remaining letters
+            newLetters = letters.substring(0,i) + letters.substring(i + 1);
+
+            // Recurse to explore further branches
+            generateWords(newWord, newLetters);
+
         }
     }
 
 
-    // TODO: Apply mergesort to sort all words. Do this by calling ANOTHER method
-    //  that will find the substrings recursively.
+    /*** Sorts the word list ***/
     public void sort() {
-
-        words  = mergeSort(words, 0, words.size() - 1);
-
-        for (String a: words) {
-            System.out.println(a);
-        }
+        this.setWords(mergeSort(words, 0, words.size() - 1));
     }
 
+
+    /*** Implementation of merge sort on an Array List of Strings ***/
     public ArrayList<String> mergeSort(ArrayList<String> arr, int left, int right) {
 
+        // Base case when only one element
         if (right - left == 0) {
             ArrayList<String> newArr = new ArrayList<String>();
             newArr.add(arr.get(left));
@@ -90,38 +92,43 @@ public class SpellingBee {
         }
 
         int med = (right + left) / 2;
+        // Recurse on left and right side of arr to further divide
         ArrayList<String> arrLeft = mergeSort(arr, left, med);
-        ArrayList<String> arrRight = mergeSort(arr, med+1, right);
+        ArrayList<String> arrRight = mergeSort(arr, med + 1, right);
+
+        // Merge sorted left/right sides
         return merge(arrLeft, arrRight);
     }
 
-    /*** takes in 2 presorted arr and merges them ***/
+    /*** Merges two sorted Array List of Strings into sorted Array List of Strings ***/
     public ArrayList<String> merge(ArrayList<String> arr1, ArrayList<String> arr2) {
 
-        ArrayList<String> sorted = new ArrayList<String>();
+        ArrayList<String> merged = new ArrayList<String>();
 
         int a = 0, b = 0, c = 0;
 
+        // Compare and add elements to merged Array List while both lists have unmerged elements
         while(a < arr1.size() && b < arr2.size()){
-
+            // Add earlier element to Array List
             if (arr1.get(a).compareTo(arr2.get(b)) <= 0) {
-                sorted.add(c++, arr1.get(a++));
+                merged.add(c++, arr1.get(a++));
             }
             else {
-                sorted.add(c++, arr2.get(b++));
+                merged.add(c++, arr2.get(b++));
             }
+
         }
 
-
+        // Add remaining list to merged ArrayList
         while(a < arr1.size()){
-            sorted.add(c++, arr1.get(a++));
+            merged.add(c++, arr1.get(a++));
         }
 
         while(b < arr2.size()) {
-            sorted.add(c++, arr2.get(b++));
+            merged.add(c++, arr2.get(b++));
         }
 
-        return sorted;
+        return merged;
 
     }
 
@@ -137,22 +144,47 @@ public class SpellingBee {
         }
     }
 
-    // TODO: For each word in words, use binary search to see if it is in the dictionary.
-    //  If it is not in the dictionary, remove it from words.
+
+     /***
+     * Check that each generated string is in the dictionary
+     * If not remove it from words
+     ***/
     public void checkWords() {
-        for(String word: words) {
-            if(!binarySearch(word)){
-                words.remove(word)
+
+        int i = 0;
+        while(i < words.size()) {
+
+            if(binarySearch(words.get(i), 0, DICTIONARY_SIZE - 1)) {
+                i++;
             }
-
-
+            else {
+                words.remove(i);
+            }
         }
     }
 
-    public void binarySearch(String word) {
+    /*** Implementation of binary search to find target word in the dictionary ***/
+    public boolean binarySearch(String target, int low, int high) {
+
+        if(low > high){
+            return false;
+        }
+
+        int mid = (high + low) / 2;
 
 
+        if(DICTIONARY[mid].equals(target)) {
+            return true;
+        }
 
+        // Recurse to examine the side where target is located
+        if(DICTIONARY[mid].compareTo(target) < 0) {
+            low = mid + 1;
+        }
+        else {
+            high = mid - 1;
+        }
+        return binarySearch(target, low, high);
     }
 
     // Prints all valid words to wordList.txt
@@ -194,18 +226,6 @@ public class SpellingBee {
     }
 
     public static void main(String[] args) {
-
-        SpellingBee sb = new SpellingBee("abc");
-        sb.generate();
-        sb.sort();
-        sb.removeDuplicates();
-        sb.checkWords();
-
-
-
-
-        /***
-
         // Prompt for letters until given only letters.
         Scanner s = new Scanner(System.in);
         String letters;
@@ -215,8 +235,8 @@ public class SpellingBee {
         }
         while (!letters.matches("[a-zA-Z]+"));
 
-        // Load the dictionary
-        SpellingBee.loadDictionary();
+         // Load the dictionary
+         SpellingBee.loadDictionary();
 
         // Generate and print all valid words from those letters.
         SpellingBee sb = new SpellingBee(letters);
@@ -229,8 +249,7 @@ public class SpellingBee {
         } catch (IOException e) {
             System.out.println("Could not write to output file.");
         }
-        s.close();
 
-         ***/
+        s.close();
     }
 }
