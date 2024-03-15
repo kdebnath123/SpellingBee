@@ -108,7 +108,7 @@ public class SpellingBee {
         int a = 0, b = 0, c = 0;
 
         // Compare and add elements to merged Array List while both lists have unmerged elements
-        while(a < arr1.size() && b < arr2.size()){
+        while(a < arr1.size() && b < arr2.size()) {
             // Add earlier element to Array List
             if (arr1.get(a).compareTo(arr2.get(b)) <= 0) {
                 merged.add(c++, arr1.get(a++));
@@ -120,7 +120,7 @@ public class SpellingBee {
         }
 
         // Add remaining list to merged ArrayList
-        while(a < arr1.size()){
+        while(a < arr1.size()) {
             merged.add(c++, arr1.get(a++));
         }
 
@@ -129,7 +129,6 @@ public class SpellingBee {
         }
 
         return merged;
-
     }
 
     // Removes duplicates from the sorted list.
@@ -166,7 +165,7 @@ public class SpellingBee {
     /*** Implementation of binary search to find target word in the dictionary ***/
     public boolean binarySearch(String target, int low, int high) {
 
-        if(low > high){
+        if(low > high) {
             return false;
         }
 
