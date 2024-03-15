@@ -105,27 +105,27 @@ public class SpellingBee {
 
         ArrayList<String> merged = new ArrayList<String>();
 
-        int a = 0, b = 0, c = 0;
+        int a = 0, b = 0;
 
         // Compare and add elements to merged Array List while both lists have unmerged elements
         while(a < arr1.size() && b < arr2.size()) {
             // Add earlier element to Array List
             if (arr1.get(a).compareTo(arr2.get(b)) <= 0) {
-                merged.add(c++, arr1.get(a++));
+                merged.add(arr1.get(a++));
             }
             else {
-                merged.add(c++, arr2.get(b++));
+                merged.add(arr2.get(b++));
             }
 
         }
 
         // Add remaining list to merged ArrayList
         while(a < arr1.size()) {
-            merged.add(c++, arr1.get(a++));
+            merged.add(arr1.get(a++));
         }
 
         while(b < arr2.size()) {
-            merged.add(c++, arr2.get(b++));
+            merged.add(arr2.get(b++));
         }
 
         return merged;
